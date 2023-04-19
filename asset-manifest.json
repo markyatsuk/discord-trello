@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/discord-trello/static/css/main.073c9b0a.css",
+    "main.js": "/discord-trello/static/js/main.11b97959.js",
+    "static/js/787.eda198b1.chunk.js": "/discord-trello/static/js/787.eda198b1.chunk.js",
+    "static/media/logo.svg": "/discord-trello/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/discord-trello/index.html",
+    "main.073c9b0a.css.map": "/discord-trello/static/css/main.073c9b0a.css.map",
+    "main.11b97959.js.map": "/discord-trello/static/js/main.11b97959.js.map",
+    "787.eda198b1.chunk.js.map": "/discord-trello/static/js/787.eda198b1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.11b97959.js"
+  ]
+}
