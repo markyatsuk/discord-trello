@@ -1,16 +1,14 @@
 {
   "files": {
-    "main.css": "/discord-trello/static/css/main.073c9b0a.css",
-    "main.js": "/discord-trello/static/js/main.11b97959.js",
-    "static/js/787.eda198b1.chunk.js": "/discord-trello/static/js/787.eda198b1.chunk.js",
-    "static/media/logo.svg": "/discord-trello/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "main.css": "/discord-trello/static/css/main.e6c13ad2.css",
+    "main.js": "/discord-trello/static/js/main.7adf9fda.js",
+    "static/media/emodji.svg": "/discord-trello/static/media/emodji.418fbf083a2ffc0018b8913b4079b774.svg",
     "index.html": "/discord-trello/index.html",
-    "main.073c9b0a.css.map": "/discord-trello/static/css/main.073c9b0a.css.map",
-    "main.11b97959.js.map": "/discord-trello/static/js/main.11b97959.js.map",
-    "787.eda198b1.chunk.js.map": "/discord-trello/static/js/787.eda198b1.chunk.js.map"
+    "main.e6c13ad2.css.map": "/discord-trello/static/css/main.e6c13ad2.css.map",
+    "main.7adf9fda.js.map": "/discord-trello/static/js/main.7adf9fda.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.11b97959.js"
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.7adf9fda.js"
   ]
 }
