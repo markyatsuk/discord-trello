@@ -1,5 +1,5 @@
-import CreateRoom from '../../components/CreateRoom/CreateRoom';
-import Messages from '../../components/Messages/Messages';
+import CreateRoom from '../../Components/CreateRoom/CreateRoom';
+import Messages from '../../Components/Messages/Messages';
 import { useSocket } from '../../context/socket.context';
 import { useRef } from 'react';
 
