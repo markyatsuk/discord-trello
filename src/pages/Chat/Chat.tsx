@@ -1,7 +1,11 @@
-import React from 'react';
+import Messages from '../../Components/Messages/Messages';
 
 function Chat() {
-  return <div>Chat</div>;
+  return (
+    <div>
+      <Messages />
+    </div>
+  );
 }
 
 export default Chat;
