@@ -23,10 +23,10 @@ interface IContext {
 
 interface IMessage {
   userName?: string;
-  username?: string;
   message?: string;
   value?: string;
   time: string;
+  emoji?: string;
 }
 
 const SocketContext = createContext<IContext>({
@@ -67,7 +67,7 @@ const SocketProvider = (children: TChildren) => {
     setMessages([
       ...messages,
       {
-        message: `${message} test`,
+        message,
         userName,
         time,
       },

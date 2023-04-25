@@ -1,5 +1,5 @@
+import Container from '../../Components/Container/Container';
 import CreateRoom from '../../Components/CreateRoom/CreateRoom';
-import Messages from '../../Components/Messages/Messages';
 import { useSocket } from '../../context/socket.context';
 import { useRef } from 'react';
 
@@ -19,22 +19,19 @@ function Room() {
 
   return (
     <div>
-      {!userName && (
-        <div>
-          <form>
-            <input autoComplete='off' placeholder='user name' ref={userNameRef} />
-            <button type='button' onClick={handleSetUserName}>
-              Start
-            </button>
-          </form>
-        </div>
-      )}
-      {userName && (
-        <>
-          <CreateRoom />
-          <Messages />
-        </>
-      )}
+      <Container>
+        {!userName && (
+          <div>
+            <form>
+              <input autoComplete='off' placeholder='user name' ref={userNameRef} />
+              <button type='button' onClick={handleSetUserName}>
+                Next
+              </button>
+            </form>
+          </div>
+        )}
+        {userName && <CreateRoom />}
+      </Container>
     </div>
   );
 }

@@ -1,9 +1,12 @@
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useSocket } from '../../context/socket.context';
 import EVENTS from '../../utils/events';
+import Container from '../Container/Container';
 
 function CreateRoom() {
+  const navigate = useNavigate();
   const { rooms, socket, roomId } = useSocket();
 
   const roomNameRef = useRef<HTMLInputElement>(null);
@@ -24,27 +27,30 @@ function CreateRoom() {
     if (id === roomId) return;
 
     socket.emit(EVENTS.CLIENT.JOIN_ROOM, id);
+    navigate('/chat');
   };
 
   return (
     <div>
-      <form>
-        <input autoComplete='off' placeholder='room name' ref={roomNameRef} />
-        <button type='button' onClick={handleCreateRoom}>
-          Create room
-        </button>
-      </form>
-      {rooms &&
-        Object.keys(rooms).map((key) => {
-          return (
-            <div key={key}>
-              <button disabled={key === roomId} onClick={() => handleJoinRoom(key)}>
-                Join {rooms[key].name}
-              </button>
-              {rooms[key].name}
-            </div>
-          );
-        })}
+      <Container>
+        <form>
+          <input autoComplete='off' placeholder='room name' ref={roomNameRef} />
+          <button type='button' onClick={handleCreateRoom}>
+            Create room
+          </button>
+        </form>
+        {rooms &&
+          Object.keys(rooms).map((key) => {
+            return (
+              <div key={key}>
+                <button disabled={key === roomId} onClick={() => handleJoinRoom(key)}>
+                  Join {rooms[key].name}
+                </button>
+                {rooms[key].name}
+              </div>
+            );
+          })}
+      </Container>
     </div>
   );
 }
