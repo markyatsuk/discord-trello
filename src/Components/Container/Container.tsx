@@ -1,7 +1,7 @@
 import s from './Container.module.css';
 
 interface IProps {
-    children: React.ReactNode
+    children: React.ReactNode, 
 }
 
 const Container = ({ children }: IProps) => (

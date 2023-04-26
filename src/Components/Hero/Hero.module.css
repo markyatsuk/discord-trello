@@ -1,0 +1,34 @@
+.hero{
+    padding: 120px 0;
+    background-image: url('../../images/heroDesktop.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    margin-top: -26px;
+}
+
+.mainTitle{
+    font-size: 42px;
+    text-align: center;
+    font-family: 'Bruno Ace', cursive;
+    margin-bottom: 15px;
+}
+
+.afterTitle{
+    font-size: 22px;
+    text-align: center;
+}
+
+.titleContainer{
+    padding: 0 125px;
+}
+
+.future{
+    height: 250px;
+    font-size: 52px;
+    margin-top: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bruno Ace', cursive;
+}
