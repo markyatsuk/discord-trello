@@ -8,9 +8,18 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path='/' element={<><Header /><Hero/><Room /></>} />
-        <Route path='/login' element={<Auth/>} />
-        <Route path='/signup' element={<Auth/>} />
+        <Route
+          path='/'
+          element={
+            <>
+              <Header />
+              <Hero />
+            </>
+          }
+        />
+        <Route path='/login' element={<Auth />} />
+        <Route path='/signup' element={<Auth />} />
+        <Route path='/room' element={<Room />} />
         <Route path='/chat' element={<Chat />} />
       </Routes>
     </div>

@@ -1,12 +1,11 @@
 import { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { useSocket } from '../../context/socket.context';
 import EVENTS from '../../utils/events';
 import Container from '../Container/Container';
+import Messages from '../Messages/Messages';
 
 function CreateRoom() {
-  const navigate = useNavigate();
   const { rooms, socket, roomId } = useSocket();
 
   const roomNameRef = useRef<HTMLInputElement>(null);
@@ -27,7 +26,6 @@ function CreateRoom() {
     if (id === roomId) return;
 
     socket.emit(EVENTS.CLIENT.JOIN_ROOM, id);
-    navigate('/chat');
   };
 
   return (
@@ -50,6 +48,7 @@ function CreateRoom() {
               </div>
             );
           })}
+        <Messages />
       </Container>
     </div>
   );
