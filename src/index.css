@@ -1,6 +1,7 @@
-*{  
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -8,12 +9,11 @@ body {
   font-family: 'Kanit', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 h1,
@@ -21,23 +21,23 @@ h2,
 h3,
 h4,
 h5,
-h6{
+h6 {
   margin: 0;
 }
 
-ul{
+ul {
   margin: 0;
   padding-left: 0;
   list-style-type: none;
 }
 
-a{
+a {
   display: block;
   text-decoration: none;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
-img{
+img {
   display: block;
   width: 100%;
 }

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import moment from 'moment';
@@ -6,8 +6,19 @@ import moment from 'moment';
 import { useSocket } from '../../context/socket.context';
 import EVENTS from '../../utils/events';
 import icon from '../../images/emodji.svg';
-import { List, Item } from './Message.styled';
 import Container from '../Container/Container';
+import {
+  List,
+  Item,
+  Icon,
+  Form,
+  Wraper,
+  Name,
+  MessageWraper,
+  Input,
+  InputWraper,
+  Emoji,
+} from './Message.styled';
 
 interface Emoji {
   name: string;
@@ -15,7 +26,7 @@ interface Emoji {
   unified: string;
 }
 
-const date = moment().format('DD/MM/YYYY hh:mm a');
+const date = moment().calendar();
 
 function Messages() {
   const [selectedEmoji, setSelectedEmoji] = useState<Emoji>();
@@ -24,6 +35,14 @@ function Messages() {
   const { socket, messages, userName, setMessages, roomId } = useSocket();
 
   const messageRef = useRef<HTMLInputElement>(null);
+  const messageWraperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const messageWraper = messageWraperRef.current;
+    if (messageWraper) {
+      messageWraper.scrollTop = messageWraper.scrollHeight;
+    }
+  }, [messages]);
 
   const handleEmojiSelect = (emoji: Emoji) => {
     setSelectedEmoji(emoji);
@@ -34,7 +53,8 @@ function Messages() {
     }
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const message = messageRef.current?.value;
     if (!String(message).trim() && !selectedEmoji) return;
 
@@ -44,7 +64,7 @@ function Messages() {
       ...messages,
       {
         message,
-        userName: 'You',
+        userName: userName,
         time: date,
       },
     ]);
@@ -55,27 +75,32 @@ function Messages() {
   };
 
   return (
-    <div>
+    <Wraper>
       <Container>
-        {messages?.map(({ message, userName, time }, i) => (
-          <List key={i}>
-            <Item>{userName}:</Item>
-            <Item>{message}</Item>
-            <Item>{time}</Item>
-          </List>
-        ))}
-        <div>
-          <form onSubmit={handleSendMessage}>
-            <input autoComplete='off' ref={messageRef} />
-            <img src={icon} alt='icon' onClick={() => setIsOpenEmoji(!openEmoji)} />
-            {openEmoji && <Picker data={data} onEmojiSelect={handleEmojiSelect} />}
-            <button type='button' onClick={handleSendMessage}>
-              send a message
-            </button>
-          </form>
-        </div>
+        <MessageWraper ref={messageWraperRef}>
+          {messages?.map(({ message, userName, time }, i) => (
+            <List key={i}>
+              <Name>{userName}:</Name>
+              <Item>{message}</Item>
+              <Item>{time}</Item>
+            </List>
+          ))}
+        </MessageWraper>
+        <>
+          <Form onSubmit={handleSendMessage}>
+            <InputWraper>
+              <Input autoComplete='off' ref={messageRef} placeholder='Message' />
+              <Icon src={icon} alt='icon' onClick={() => setIsOpenEmoji(!openEmoji)} />
+              {openEmoji && (
+                <Emoji>
+                  <Picker data={data} onEmojiSelect={handleEmojiSelect} />
+                </Emoji>
+              )}
+            </InputWraper>
+          </Form>
+        </>
       </Container>
-    </div>
+    </Wraper>
   );
 }
 
