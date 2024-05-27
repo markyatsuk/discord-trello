@@ -1,0 +1,35 @@
+.lobby{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inputName{
+    padding: 8px 24px;
+    font-size: 16px;
+    font-family: 'Bruno Ace', cursive;
+    outline: none;
+    border:none;
+    border-radius: 8px;
+}
+
+.inputName:focus{
+    outline: 2px #3F8CFF solid;
+}
+
+.createRoomBtn{
+    margin-left: 16px;
+    font-size: 16px;
+    padding: 16px 48px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Bruno Ace', cursive;
+    cursor: pointer;
+    transition: 250ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.createRoomBtn:hover {
+        background-color: #3F8CFF;
+        color: #ffffff;
+}
