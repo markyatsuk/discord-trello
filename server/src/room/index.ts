@@ -30,17 +30,26 @@ export const roomHandler = (socket: Socket) => {
         }
         socket.on("disconnect", () => {
             console.log("user left the room", peerId);
-            leaveRoom({roomId, peerId})
+            leaveRoom({roomId, peerId});
         })
     }
 
     const leaveRoom = ({roomId, peerId} : IRoomParams) => {
         rooms[roomId] = rooms[roomId].filter((id) => id !== peerId);
-        socket.to(roomId).emit("user-disconnected")
+        socket.to(roomId).emit("user-disconnected");
     }
 
+    const startSharing = ({peerId, roomId} : IRoomParams) => {
+        socket.to(roomId).emit("user-started-sharing", peerId);
+    }
 
-    socket.on("create-room", createRoom)
-    socket.on("join-room", joinRoom)
-    socket.on("leave-room", leaveRoom)
+    const stopSharing = (roomId: string) => {
+        socket.to(roomId).emit("user-stop-sharing");
+    }
+
+    socket.on("create-room", createRoom);
+    socket.on("join-room", joinRoom);
+    socket.on("start-sharing", startSharing);
+    socket.on("stop-sharing", stopSharing);
+
 }
