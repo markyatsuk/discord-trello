@@ -25,7 +25,8 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({ children } : TChildr
   const [me, setMe] = useState<Peer>();
   const [stream, setStream] = useState<MediaStream>();
   const [peers, dispatch] = useReducer(peersReducer, {})
-
+  const [screenSharingId, setScreenSharingId] = useState<string>('');
+  const [roomId, setRoomId] = useState<string>('');
   const enterRoom = ({roomId}: {roomId: 'string'}) => {
     console.log({roomId})
     navigate(`/chat/room/${roomId}`);
@@ -37,6 +38,33 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({ children } : TChildr
 
   const removePeer = (peerId: string) => {
     dispatch(removePeerAction(peerId));
+  }
+
+  const shareScreen = () => {
+    if(screenSharingId){
+      try{
+        navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(switchStream);
+      }catch(error){
+        console.error('Error accessing media devices.', error);      
+      }
+    }else{
+      try{
+        navigator.mediaDevices.getDisplayMedia({}).then(switchStream);
+      }catch(error){
+        console.error('Error accessing media devices.', error);      
+      }
+      
+    }
+    
+  }
+
+  const switchStream = (stream: MediaStream) => {
+    setStream(stream);
+    setScreenSharingId(me?.id || '' );
+    Object.values(me?.connections || {}).forEach((connection) => {
+      const videoTrack = stream?.getTracks().find(track => track.kind === 'video');
+      connection[0].peeerConnection.getSenders()[1].replaceTrack(videoTrack).catch((error: any) => console.error(error))
+    })
   }
 
   useEffect(() => {
@@ -52,32 +80,59 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({ children } : TChildr
 
     ws.on('room-created', enterRoom);
     ws.on('get-users', getUsers);
-    ws.on('user-disconnected', removePeer)
-  },[])
+    ws.on('user-disconnected', removePeer);
+    ws.on('user-started-sharing', (peerId) => setScreenSharingId(peerId));
+    ws.on('user-stopped-sharing', (peerId) => setScreenSharingId(peerId));
+    
+    return () => {
+      ws.off('room-created');
+      ws.off('get-users');
+      ws.off('user-disconnected');
+      ws.off('user-started-sharing');
+      ws.off('user-stopped-sharing');
+      ws.off('room-joined');
+    };
+  }, []);
+
+  useEffect(() => {
+    if (screenSharingId){
+      ws.emit('start-sharing', {peerId: screenSharingId, roomId})
+    }
+    else{
+      ws.emit('stop-sharing')
+    }
+   
+  }, [screenSharingId, roomId])
 
   useEffect(() => {
     if(!me) return;
     if(!stream) return;
-
-    ws.on('user-joined', ({peerId}) => {
-        const call = me.call(peerId, stream);
-        call.on('stream', (peerStream) => {
-          dispatch(addPeerAction(peerId, peerStream))
-        })
+    
+    const handleUserJoined = ({ peerId }: { peerId: string }) => {
+      const call = me.call(peerId, stream);
+      call.on('stream', (peerStream) => {
+        dispatch(addPeerAction(peerId, peerStream));
       });
+    };
+
+    ws.on('user-joined', handleUserJoined);
     me.on('call', (call) => {
       call.answer(stream)
       call.on('stream', (peerStream) => {
         dispatch(addPeerAction(call.peer, peerStream))
-      })
-    })
-    
+      });
+    });
+    return () => {
+      ws.off('user-joined', handleUserJoined);
+    };
   }, [me, stream])
 
-  console.log({peers})
+  useEffect(() => {
+    console.log({ peers });
+  }, [peers]);
 
   return (
-    <RoomContext.Provider value={{ ws, me, stream, peers }}>
+    <RoomContext.Provider value={{ ws, me, stream, peers, shareScreen, screenSharingId, setRoomId }}>
       {children}
     </RoomContext.Provider>
   );
