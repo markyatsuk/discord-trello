@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
-import moment from 'moment';
+import {v4 as uuidV4} from 'uuid';
 
-import { useSocket } from '../../context/socket.context';
-import EVENTS from '../../utils/events';
+import { IMessage, RoomContext, } from '../../context/socket.context';
 import icon from '../../images/emodji.svg';
 import Container from '../Container/Container';
 import {
@@ -32,7 +31,7 @@ function Messages() {
   const [selectedEmoji, setSelectedEmoji] = useState<Emoji>();
   const [openEmoji, setIsOpenEmoji] = useState<boolean>(false);
 
-  const { socket, messages, userName, setMessages, roomId } = useSocket();
+  const { messages, sendMessage, chat } = useContext(RoomContext);
 
   const messageRef = useRef<HTMLInputElement>(null);
   const messageWraperRef = useRef<HTMLDivElement>(null);
@@ -55,20 +54,12 @@ function Messages() {
 
   const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const date = moment().calendar();
     const message = messageRef.current?.value;
     if (!String(message).trim() && !selectedEmoji) return;
+    sendMessage(message);
+    // socket.emit(EVENTS.CLIENT.SEND_ROOM_MESSAGE, { roomId, message, userName });
 
-    socket.emit(EVENTS.CLIENT.SEND_ROOM_MESSAGE, { roomId, message, userName });
-
-    setMessages([
-      ...messages,
-      {
-        message,
-        userName: userName,
-        time: date,
-      },
-    ]);
+    
 
     if (messageRef.current) messageRef.current.value = '';
 
@@ -79,18 +70,21 @@ function Messages() {
     <Wraper>
       <Container>
         <MessageWraper ref={messageWraperRef}>
-          {messages?.map(({ message, userName, time }, i) => (
-            <List key={i}>
-              <Name>{userName}:</Name>
-              <Item>{message}</Item>
-              <Item>{time}</Item>
-            </List>
-          ))}
+          {chat?.messages.map(({ message, userName, time } : IMessage) => {
+            console.log(chat)
+            return ((
+              <List key={uuidV4()}>
+                <Name>{userName}:</Name>
+                <Item>{message}</Item>
+                <Item>{time}</Item>
+              </List>
+            ))
+          })}
         </MessageWraper>
         <>
           <Form onSubmit={handleSendMessage}>
             <InputWraper>
-              <Input autoComplete='off' ref={messageRef} placeholder='Message' />
+              <Input autoComplete='off' ref={messageRef} placeholder='Message'/>
               <Icon src={icon} alt='icon' onClick={() => setIsOpenEmoji(!openEmoji)} />
               {openEmoji && (
                 <Emoji>

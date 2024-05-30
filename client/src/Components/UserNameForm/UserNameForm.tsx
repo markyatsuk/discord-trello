@@ -1,12 +1,12 @@
 import { useContext, useRef } from 'react';
-import { RoomContext, useSocket } from '../../context/socket.context';
+import { RoomContext } from '../../context/socket.context';
 import s from './UserNameForm.module.css';
 import { NavLink } from 'react-router-dom';
 
 
 const UserNameForm: React.FC = () => {
   
-  const { setUserName } = useSocket();
+  const { userName, setUserName } = useContext(RoomContext);
   const userNameRef = useRef<HTMLInputElement>(null);
   const {ws} = useContext(RoomContext);
   
@@ -28,7 +28,7 @@ const UserNameForm: React.FC = () => {
   return (
     <div className={s.lobby}>
       <form onSubmit={createRoom}>
-        <input autoComplete='off' placeholder='user name' ref={userNameRef} className={s.inputName}/>
+        <input autoComplete='off' placeholder='user name' ref={userNameRef} className={s.inputName}  onChange={(e) => setUserName(e.target.value)} value={userName}/>
         <NavLink to={'/'}><button type='button' onClick={createRoom} className={s.createRoomBtn}>
           Next
         </button></NavLink>
